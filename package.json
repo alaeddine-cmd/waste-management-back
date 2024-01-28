@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "build": "npm install"
-  },
+    "build": "echo 'Build script executed.'"  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
