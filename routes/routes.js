@@ -94,6 +94,7 @@ router.post('/fillLevel/:SerialNumber', async (req, res) => {
 
         // Update the fill level for the device with the provided serial number
         const device = await Model.findOneAndUpdate(
+            { serialNumber: SerialNumber },
             { fillLevel: FillLevel },
             { new: true }
         );
@@ -110,6 +111,7 @@ router.post('/fillLevel/:SerialNumber', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 
 module.exports = router;
