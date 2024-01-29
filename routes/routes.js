@@ -79,6 +79,37 @@ router.post('/decreaseFillLevel', async (req, res) =>{
     }
 });
 
+router.post('/fillLevel', async (req, res) => {
+    try {
+      const { SerialNumber, FillLevel} = req.body;
+        if (!SerialNumber) {
+        return res.status(400).json({ message: 'Serial number is required' });
+      }
+  
+      // Check if the fillLevel is provided
+      if (!FillLevel) {
+        return res.status(400).json({ message: 'Fill level is required' });
+      }
+  
+      // Update the fill level for the device with the provided serial number
+      const device = await Model.findOneAndUpdate(
+        { serialNumber: SerialNumber },
+        { fillLevel: FillLevel },
+        { new: true }
+      );
+  
+      // Check if the device with the provided serial number exists
+      if (!device) {
+        return res.status(404).json({ message: 'Device not found' });
+      }
+  
+      // Send a success response
+      res.json({ message: 'Fill level updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
 
 module.exports = router;
