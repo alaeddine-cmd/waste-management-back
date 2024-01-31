@@ -3,7 +3,7 @@ const Model = require('../models/model');
 const router = express.Router()
 router.use(express.json());
 
-router.post('/generateDevice', async (req, res) => {
+router.post('/generateDevice1', async (req, res) => {
     try {
         const { deviceName, deviceSerialNumber } = req.body;
         const existingDevice = await Model.findOne({ serialNumber: deviceSerialNumber });
@@ -25,7 +25,7 @@ router.post('/generateDevice', async (req, res) => {
     }
 });
 
-router.get('/fillLevel/:serialNumber', async (req, res) => {
+router.get('/fillLevel1/:serialNumber', async (req, res) => {
     try {
         const { serialNumber } = req.params;
         const device = await Model.findOne({ serialNumber: serialNumber });
@@ -40,7 +40,7 @@ router.get('/fillLevel/:serialNumber', async (req, res) => {
 });
 
 
-router.post('/increaseFillLevel', async (req, res) => {
+router.post('/increaseFillLevel1', async (req, res) => {
 
     try {
         const { SerialNumber } = req.body;
@@ -63,7 +63,7 @@ router.post('/increaseFillLevel', async (req, res) => {
     }
 });
 
-router.post('/decreaseFillLevel', async (req, res) => {
+router.post('/decreaseFillLevel1', async (req, res) => {
     try {
         const { SerialNumber } = req.body;
         const updatedData = await Model.findOneAndUpdate(
@@ -79,7 +79,7 @@ router.post('/decreaseFillLevel', async (req, res) => {
     }
 });
 
-router.post('/fillLevel/:SerialNumber', async (req, res) => {
+router.post('/fillLevel1/:SerialNumber', async (req, res) => {
     try {
         const { SerialNumber } = req.params;
         const { FillLevel } = req.body;
