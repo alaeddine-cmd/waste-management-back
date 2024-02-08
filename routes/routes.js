@@ -35,7 +35,7 @@ router.get('/deviceDetails/:deviceId', async (req, res) => {
         if (!device) {
             return res.status(404).json({ message: 'device does not exist' });
         }
-        res.json({ device});
+        res.json({ device });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'error' });
@@ -54,15 +54,41 @@ router.get('/allDevices', async (req, res) => {
 });
 
 
-//update device details by deviceId
 router.post('/deviceDetails/:deviceId', async (req, res) => {
     try {
         const { deviceId } = req.params;
-        const {fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType } = req.body;
+        const { fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType } = req.body;
         if (!deviceId) {
             return res.status(400).json({ message: 'deviceId is required' });
         }
 
+        // Function to validate the date format
+        const validateDateFormat = (dateString) => {
+            const dateFormatRegex = /^\d{1,2}\/\d{1,2}\/\d{2}$/;
+            return dateFormatRegex.test(dateString);
+        };
+
+        const validateDateFormat2 = (dateString) => {
+            const dateFormatRegex = /^\d{1,2}\/\d{1,2}\/\d{2}\s-\s\d{2}:\d{2}\s-\s\{\s\d{2}\s:\s\d{2}\s\}$/;
+            return dateFormatRegex.test(dateString);
+        };
+
+        // Validate lastEmptyDate
+        if (lastEmptyDate && !validateDateFormat(lastEmptyDate)) {
+            return res.status(400).json({ message: 'Invalid date format for lastEmptyDate. The correct format is D / M / YY' });
+        }
+
+        // Validate LastMaintenanceDate
+        if (lastMaintenanceDate && !validateDateFormat(lastMaintenanceDate)) {
+            return res.status(400).json({ message: 'Invalid date format for lastMaintenanceDate. The correct format is D / M / YY' });
+        }
+
+        // Validate lastAPIUse
+        if (lastAPIUse && !validateDateFormat2(lastAPIUse)) {
+            return res.status(400).json({ message: 'Invalid date format for lastAPIUse. The correct format is D / M / YY - 00:00 - { 00 : 00 }' });
+        }
+
+        // Construct updateFields object
         const updateFields = {};
         if (fillLevel) updateFields.FillLevel = fillLevel;
         if (lastEmptyDate) updateFields.LastEmptyDate = lastEmptyDate;
@@ -74,6 +100,7 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
         if (lastMaintenanceDate) updateFields.LastMaintenanceDate = lastMaintenanceDate;
         if (carType) updateFields.CarType = carType;
 
+        // Update the device
         const device = await Model.findOneAndUpdate(
             { DeviceId: deviceId },
             updateFields,
@@ -90,6 +117,7 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 
 

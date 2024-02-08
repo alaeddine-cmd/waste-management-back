@@ -17,13 +17,13 @@ const dataSchema = new mongoose.Schema({
     },
     LastEmptyDate: {
         required: false,
-        type: Date,
-        default: Date.now
+        type: String,
     },
     TrashType: {
         required: true,
         type: String
     },
+
     Localisation: {
         required: true,
         type: String
