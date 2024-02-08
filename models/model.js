@@ -23,7 +23,16 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-
+    geo_point: {
+        Lon: {
+            type: Number,
+            required: false
+        },
+        Lat: {
+            type: Number,
+            required: false
+        }
+    },
     Localisation: {
         required: true,
         type: String
@@ -49,7 +58,7 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: String
     }
-});
+}, { versionKey: false });
 
 
 module.exports = mongoose.model('Data', dataSchema);

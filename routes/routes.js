@@ -3,10 +3,11 @@ const Model = require('../models/model');
 const router = express.Router()
 router.use(express.json());
 
+
 //generate a new device
 router.post('/generate', async (req, res) => {
     try {
-        const { deviceId, deviceSerialNumber, trashType, localisation, carType } = req.body;
+        const { deviceId, deviceSerialNumber, trashType, localisation, carType, fillLevel } = req.body;
         const existingDevice = await Model.findOne({ DeviceId: deviceId });
         if (existingDevice) {
             return res.status(400).json({ message: 'device with this id  exists!' });
@@ -15,6 +16,7 @@ router.post('/generate', async (req, res) => {
             DeviceId: deviceId,
             SerialNumber: deviceSerialNumber,
             TrashType: trashType,
+            FillLevel: fillLevel,
             Localisation: localisation,
             CarType: carType,
         });
@@ -47,17 +49,19 @@ router.get('/allDevices', async (req, res) => {
     try {
         const devices = await Model.find({});
         res.json({ devices });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
+
 //update a specefic device
 router.post('/deviceDetails/:deviceId', async (req, res) => {
     try {
         const { deviceId } = req.params;
-        const { fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType } = req.body;
+        const { fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType, lon, lat } = req.body;
         if (!deviceId) {
             return res.status(400).json({ message: 'deviceId is required' });
         }
@@ -69,7 +73,7 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
         };
 
         const validateDateFormat2 = (dateString) => {
-            const dateFormatRegex = /^\d{1,2}\/\d{1,2}\/\d{2}\s-\s\d{2}:\d{2}\s-\s\{\s\d{2}\s:\s\d{2}\s\}$/;
+            const dateFormatRegex = /^\d{1,2}\/\d{1,2}\/\d{2}\s-\s\d{1,2}:\d{1,2}\s-\s\{\s\d{1,2}\s:\s\d{1,2}\s\}$/;
             return dateFormatRegex.test(dateString);
         };
 
@@ -99,8 +103,12 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
         if (codeName) updateFields.CodeName = codeName;
         if (lastMaintenanceDate) updateFields.LastMaintenanceDate = lastMaintenanceDate;
         if (carType) updateFields.CarType = carType;
+        if (!updateFields.geo_point) {
+            updateFields.geo_point = {};
+        }
+        if (lat) updateFields.geo_point.Lat = lat;
+        if (lon) updateFields.geo_point.Lon = lon;
 
-        // Update the device
         const device = await Model.findOneAndUpdate(
             { DeviceId: deviceId },
             updateFields,
