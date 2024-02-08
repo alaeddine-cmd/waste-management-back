@@ -53,7 +53,7 @@ router.get('/allDevices', async (req, res) => {
     }
 });
 
-
+//update a specefic device
 router.post('/deviceDetails/:deviceId', async (req, res) => {
     try {
         const { deviceId } = req.params;
