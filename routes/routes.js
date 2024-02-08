@@ -127,6 +127,25 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
 });
 
 
+// Delete a specific device by deviceId
+router.delete('/delete/:deviceId', async (req, res) => {
+    try {
+        const { deviceId } = req.params;
+
+        // Find and delete the device
+        const deletedDevice = await Model.findOneAndDelete({ DeviceId: deviceId });
+
+        // Check if the device exists
+        if (!deletedDevice) {
+            return res.status(404).json({ message: 'Device not found' });
+        }
+
+        res.json({ message: 'Device deleted successfully', device: deletedDevice });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
 module.exports = router;
