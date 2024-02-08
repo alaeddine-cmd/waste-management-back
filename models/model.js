@@ -2,22 +2,52 @@ const mongoose = require('mongoose');
 
 const dataSchema = new mongoose.Schema({
 
-    device: {
+    DeviceId: {
         required: true,
         type: String
     },
-    serialNumber: {
+    SerialNumber: {
         required: true,
         type: String
     },
-    fillLevel: {
-        required: true,
-        type: Number
+    FillLevel: {
+        required: false,
+        type: Number,
+        default: 0
     },
-    timestamp:{
-        required: true,
+    LastEmptyDate: {
+        required: false,
         type: Date,
         default: Date.now
+    },
+    TrashType: {
+        required: true,
+        type: String
+    },
+    Localisation: {
+        required: true,
+        type: String
+    },
+    TComment: {
+        required: false,
+        type: String,
+        default: "Aucun"
+    },
+    LastAPIUse: {
+        required: false,
+        type: String
+    },
+    CodeName: {
+        required: false,
+        type: String
+    },
+    LastMaintenanceDate: {
+        required: false,
+        type: String
+    },
+    CarType: {
+        required: true,
+        type: String
     }
 });
 
