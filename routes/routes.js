@@ -42,6 +42,16 @@ router.get('/deviceDetails/:deviceId', async (req, res) => {
     }
 });
 
+//get all devices
+router.get('/allDevices', async (req, res) => {
+    try {
+        const devices = await Model.find({});
+        res.json({ devices });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
 //update device details by deviceId
