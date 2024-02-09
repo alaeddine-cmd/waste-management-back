@@ -61,7 +61,7 @@ router.get('/allDevices', async (req, res) => {
 router.post('/deviceDetails/:deviceId', async (req, res) => {
     try {
         const { deviceId } = req.params;
-        const { fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType, lon, lat } = req.body;
+        const { fillLevel, lastEmptyDate, trashType, localisation, tComment, lastAPIUse, codeName, lastMaintenanceDate, carType, lon, lat, status } = req.body;
         if (!deviceId) {
             return res.status(400).json({ message: 'deviceId is required' });
         }
@@ -95,6 +95,7 @@ router.post('/deviceDetails/:deviceId', async (req, res) => {
         // Construct updateFields object
         const updateFields = {};
         if (fillLevel) updateFields.FillLevel = fillLevel;
+        if (status) updateFields.Status = status;
         if (lastEmptyDate) updateFields.LastEmptyDate = lastEmptyDate;
         if (trashType) updateFields.TrashType = trashType;
         if (localisation) updateFields.Localisation = localisation;

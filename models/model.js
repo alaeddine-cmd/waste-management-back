@@ -57,6 +57,10 @@ const dataSchema = new mongoose.Schema({
     CarType: {
         required: true,
         type: String
+    },
+    Status :{
+        required: false,
+        type: String
     }
 }, { versionKey: false });
 
