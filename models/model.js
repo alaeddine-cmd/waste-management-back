@@ -61,6 +61,10 @@ const dataSchema = new mongoose.Schema({
     Status :{
         required: false,
         type: String
+    },
+    ImagePath :{
+        required: false,
+        type: String
     }
 }, { versionKey: false });
 
